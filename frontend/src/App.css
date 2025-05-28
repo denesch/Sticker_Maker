@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Print Styles */
+/* EU Print Styles for A4 format */
 @media print {
   * {
     -webkit-print-color-adjust: exact !important;
@@ -15,17 +15,20 @@
     display: block !important;
   }
 
-  .print-layout {
+  .print-layout-eu {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.25in;
-    padding: 0.5in;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5mm;
+    padding: 10mm;
     page-break-inside: avoid;
   }
 
   .print-sticker-item {
     break-inside: avoid;
     page-break-inside: avoid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Hide everything except print layout when printing */
@@ -38,9 +41,10 @@
     padding: 0;
   }
 
+  /* EU A4 page format */
   @page {
-    size: letter;
-    margin: 0.5in;
+    size: A4;
+    margin: 10mm;
   }
 }
 
@@ -54,6 +58,15 @@
 /* App Styles */
 .App {
   min-height: 100vh;
+}
+
+/* EU Sticker Shapes */
+.star-shape {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.burst-shape {
+  clip-path: polygon(50% 0%, 60% 20%, 80% 10%, 70% 30%, 100% 25%, 75% 45%, 95% 65%, 70% 60%, 80% 85%, 55% 70%, 50% 100%, 45% 70%, 20% 85%, 30% 60%, 5% 65%, 25% 45%, 0% 25%, 30% 30%, 20% 10%, 40% 20%);
 }
 
 /* Custom sticker animations */
@@ -91,13 +104,19 @@
   transform: translateX(100%);
 }
 
-/* Print optimization */
+/* EU metric measurements display */
+.eu-size-display {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Print optimization for EU formats */
 .print-sticker {
   box-shadow: none !important;
   border: 1px solid #ddd;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for EU layout */
 @media (max-width: 768px) {
   .sticker-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -106,9 +125,13 @@
   .discount-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+  
+  .eu-size-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-/* Sticker border effects */
+/* Sticker border effects for EU standards */
 .sticker-border-round {
   position: relative;
 }
@@ -122,12 +145,25 @@
   pointer-events: none;
 }
 
+/* EU color compliance indicators */
+.eu-compliant-color {
+  position: relative;
+}
+
+.eu-compliant-color::after {
+  content: '🇪🇺';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  font-size: 10px;
+}
+
 /* Loading animation for preview */
 .preview-loading {
   @apply animate-pulse bg-gray-200;
 }
 
-/* Custom scrollbar for controls */
+/* Custom scrollbar for EU controls */
 .controls-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -142,4 +178,33 @@
 
 .controls-container::-webkit-scrollbar-thumb:hover {
   @apply bg-gray-400;
+}
+
+/* EU sticker standard indicators */
+.eu-standard-badge {
+  @apply bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full;
+}
+
+/* Special EU discount styling */
+.eu-discount-text {
+  font-family: 'Arial Black', Arial, sans-serif;
+  letter-spacing: -0.5px;
+}
+
+/* EU retail color standards */
+.retail-red { background-color: #dc3545; }
+.retail-blue { background-color: #007bff; }
+.retail-green { background-color: #28a745; }
+.retail-orange { background-color: #fd7e14; }
+.retail-yellow { background-color: #ffc107; }
+
+/* High contrast for EU accessibility */
+@media (prefers-contrast: high) {
+  .sticker-control-button {
+    border-width: 3px;
+  }
+  
+  .preview-container {
+    border: 2px solid #000;
+  }
 }

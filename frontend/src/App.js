@@ -6,10 +6,10 @@ import './App.css';
 const App = () => {
   const [selectedShape, setSelectedShape] = useState('round');
   const [selectedDiscount, setSelectedDiscount] = useState('-50%');
-  const [selectedSize, setSelectedSize] = useState('2');
+  const [selectedSize, setSelectedSize] = useState('40');
   const [selectedColor, setSelectedColor] = useState('red');
-  const [selectedPaperType, setSelectedPaperType] = useState('round-2');
-  const [selectedUnit, setSelectedUnit] = useState('cm');
+  const [selectedPaperType, setSelectedPaperType] = useState('round-40');
+  const [selectedUnit, setSelectedUnit] = useState('mm');
   const [borderEnabled, setBorderEnabled] = useState(true);
   const [borderColor, setBorderColor] = useState('white');
   const [borderThickness, setBorderThickness] = useState('2');
@@ -19,10 +19,13 @@ const App = () => {
   const shapes = [
     { id: 'round', name: 'Round', icon: '●' },
     { id: 'square', name: 'Square', icon: '■' },
-    { id: 'rectangle', name: 'Rectangle', icon: '▬' }
+    { id: 'rectangle', name: 'Rectangle', icon: '▬' },
+    { id: 'star', name: 'Star', icon: '★' },
+    { id: 'burst', name: 'Burst', icon: '💥' }
   ];
 
-  const discounts = ['-5%', '-10%', '-15%', '-20%', '-25%', '-30%', '-35%', '-40%', '-45%', '-50%', '-55%', '-60%', '-65%', '-70%', '-75%', '-80%', '-85%', '-90%'];
+  // EU standard discount percentages commonly used in European retail
+  const discounts = ['-5%', '-10%', '-15%', '-20%', '-25%', '-30%', '-35%', '-40%', '-45%', '-50%', '-55%', '-60%', '-65%', '-70%', '-75%', '-80%', '-85%', '-90%', '-95%'];
 
   const colors = [
     { id: 'red', name: 'Red', bg: 'bg-red-500', text: 'text-white' },
@@ -46,56 +49,71 @@ const App = () => {
   ];
 
   const units = [
-    { id: 'cm', name: 'Centimeters (cm)', factor: 2.54 },
-    { id: 'mm', name: 'Millimeters (mm)', factor: 25.4 },
-    { id: 'in', name: 'Inches (in)', factor: 1 }
+    { id: 'mm', name: 'Millimeters (mm)', factor: 1 },
+    { id: 'cm', name: 'Centimeters (cm)', factor: 0.1 },
+    { id: 'in', name: 'Inches (in)', factor: 0.0393701 }
   ];
 
-  // Enhanced size options with more granular choices
+  // EU Standard sticker sizes in millimeters (based on European retail standards)
   const sizesOptions = {
     round: [
-      { id: '0.5', inches: 0.5 }, { id: '0.75', inches: 0.75 }, { id: '1', inches: 1 },
-      { id: '1.25', inches: 1.25 }, { id: '1.5', inches: 1.5 }, { id: '1.75', inches: 1.75 },
-      { id: '2', inches: 2 }, { id: '2.25', inches: 2.25 }, { id: '2.5', inches: 2.5 },
-      { id: '2.75', inches: 2.75 }, { id: '3', inches: 3 }, { id: '3.5', inches: 3.5 },
-      { id: '4', inches: 4 }, { id: '5', inches: 5 }
+      { id: '15', mm: 15 }, { id: '20', mm: 20 }, { id: '25', mm: 25 },
+      { id: '30', mm: 30 }, { id: '35', mm: 35 }, { id: '40', mm: 40 },
+      { id: '45', mm: 45 }, { id: '50', mm: 50 }, { id: '55', mm: 55 },
+      { id: '60', mm: 60 }, { id: '65', mm: 65 }, { id: '70', mm: 70 },
+      { id: '80', mm: 80 }, { id: '90', mm: 90 }, { id: '100', mm: 100 }
     ],
     square: [
-      { id: '0.5', inches: 0.5 }, { id: '0.75', inches: 0.75 }, { id: '1', inches: 1 },
-      { id: '1.25', inches: 1.25 }, { id: '1.5', inches: 1.5 }, { id: '2', inches: 2 },
-      { id: '2.5', inches: 2.5 }, { id: '3', inches: 3 }, { id: '4', inches: 4 }
+      { id: '15', mm: 15 }, { id: '20', mm: 20 }, { id: '25', mm: 25 },
+      { id: '30', mm: 30 }, { id: '35', mm: 35 }, { id: '40', mm: 40 },
+      { id: '45', mm: 45 }, { id: '50', mm: 50 }, { id: '60', mm: 60 },
+      { id: '70', mm: 70 }, { id: '80', mm: 80 }, { id: '100', mm: 100 }
     ],
     rectangle: [
-      { id: '2x1', width: 2, height: 1 }, { id: '2.25x1.25', width: 2.25, height: 1.25 },
-      { id: '3x1', width: 3, height: 1 }, { id: '3x1.5', width: 3, height: 1.5 },
-      { id: '3x2', width: 3, height: 2 }, { id: '4x1', width: 4, height: 1 },
-      { id: '4x2', width: 4, height: 2 }, { id: '4x3', width: 4, height: 3 },
-      { id: '5x2', width: 5, height: 2 }, { id: '5x3', width: 5, height: 3 }
+      { id: '30x20', width: 30, height: 20 }, { id: '40x25', width: 40, height: 25 },
+      { id: '50x30', width: 50, height: 30 }, { id: '60x40', width: 60, height: 40 },
+      { id: '70x45', width: 70, height: 45 }, { id: '80x50', width: 80, height: 50 },
+      { id: '90x50', width: 90, height: 50 }, { id: '100x60', width: 100, height: 60 },
+      { id: '120x80', width: 120, height: 80 }, { id: '150x100', width: 150, height: 100 }
+    ],
+    star: [
+      { id: '30', mm: 30 }, { id: '40', mm: 40 }, { id: '50', mm: 50 },
+      { id: '60', mm: 60 }, { id: '70', mm: 70 }, { id: '80', mm: 80 }
+    ],
+    burst: [
+      { id: '40', mm: 40 }, { id: '50', mm: 50 }, { id: '60', mm: 60 },
+      { id: '70', mm: 70 }, { id: '80', mm: 80 }, { id: '90', mm: 90 }
     ]
   };
 
+  // EU Standard sticker roll types (common in European retail)
   const paperTypes = [
-    { id: 'round-1', name: '1" Round Roll', type: 'round', size: '1' },
-    { id: 'round-1.5', name: '1.5" Round Roll', type: 'round', size: '1.5' },
-    { id: 'round-2', name: '2" Round Roll', type: 'round', size: '2' },
-    { id: 'round-2.5', name: '2.5" Round Roll', type: 'round', size: '2.5' },
-    { id: 'round-3', name: '3" Round Roll', type: 'round', size: '3' },
-    { id: 'rect-standard', name: '2.25×1.25" Rectangle Roll', type: 'rectangle', size: '2.25x1.25' },
-    { id: 'rect-large', name: '3×2" Rectangle Roll', type: 'rectangle', size: '3x2' },
-    { id: 'rect-wide', name: '4×2" Rectangle Roll', type: 'rectangle', size: '4x2' },
-    { id: 'square-1.5', name: '1.5×1.5" Square Roll', type: 'square', size: '1.5' },
-    { id: 'square-2', name: '2×2" Square Roll', type: 'square', size: '2' },
-    { id: 'square-2.5', name: '2.5×2.5" Square Roll', type: 'square', size: '2.5' }
+    { id: 'round-20', name: '20mm Round Roll', type: 'round', size: '20', description: 'Small price tags' },
+    { id: 'round-25', name: '25mm Round Roll', type: 'round', size: '25', description: 'Compact labels' },
+    { id: 'round-30', name: '30mm Round Roll', type: 'round', size: '30', description: 'Standard small' },
+    { id: 'round-35', name: '35mm Round Roll', type: 'round', size: '35', description: 'Medium labels' },
+    { id: 'round-40', name: '40mm Round Roll', type: 'round', size: '40', description: 'Popular size' },
+    { id: 'round-50', name: '50mm Round Roll', type: 'round', size: '50', description: 'Large discount' },
+    { id: 'round-60', name: '60mm Round Roll', type: 'round', size: '60', description: 'Extra large' },
+    { id: 'round-70', name: '70mm Round Roll', type: 'round', size: '70', description: 'Supermarket' },
+    { id: 'rect-30x20', name: '30×20mm Rectangle Roll', type: 'rectangle', size: '30x20', description: 'Small rect' },
+    { id: 'rect-40x25', name: '40×25mm Rectangle Roll', type: 'rectangle', size: '40x25', description: 'Standard rect' },
+    { id: 'rect-50x30', name: '50×30mm Rectangle Roll', type: 'rectangle', size: '50x30', description: 'Medium rect' },
+    { id: 'rect-70x45', name: '70×45mm Rectangle Roll', type: 'rectangle', size: '70x45', description: 'Large rect' },
+    { id: 'square-25', name: '25×25mm Square Roll', type: 'square', size: '25', description: 'Small square' },
+    { id: 'square-30', name: '30×30mm Square Roll', type: 'square', size: '30', description: 'Standard square' },
+    { id: 'square-40', name: '40×40mm Square Roll', type: 'square', size: '40', description: 'Large square' },
+    { id: 'square-50', name: '50×50mm Square Roll', type: 'square', size: '50', description: 'XL square' }
   ];
 
   const getCurrentColor = () => colors.find(c => c.id === selectedColor);
   const getCurrentUnit = () => units.find(u => u.id === selectedUnit);
   const getCurrentBorderColor = () => borderColors.find(b => b.id === borderColor);
 
-  const convertSize = (inches) => {
+  const convertSize = (mm) => {
     const unit = getCurrentUnit();
-    const converted = inches * unit.factor;
-    return selectedUnit === 'mm' ? Math.round(converted) : Math.round(converted * 10) / 10;
+    const converted = mm * unit.factor;
+    return selectedUnit === 'mm' ? Math.round(converted) : Math.round(converted * 100) / 100;
   };
 
   const getSizeDisplay = (sizeObj) => {
@@ -104,7 +122,7 @@ const App = () => {
       const height = convertSize(sizeObj.height);
       return `${width}×${height} ${selectedUnit}`;
     } else {
-      const size = convertSize(sizeObj.inches);
+      const size = convertSize(sizeObj.mm);
       return `${size} ${selectedUnit}`;
     }
   };
@@ -112,16 +130,19 @@ const App = () => {
   const renderSticker = (size = 120, isPreview = true, exportMode = false) => {
     const currentColor = getCurrentColor();
     const currentBorderColor = getCurrentBorderColor();
-    const sizeNum = selectedShape === 'rectangle' 
-      ? sizesOptions[selectedShape].find(s => s.id === selectedSize)?.width || 2
-      : sizesOptions[selectedShape].find(s => s.id === selectedSize)?.inches || 2;
+    const sizeData = selectedShape === 'rectangle' 
+      ? sizesOptions[selectedShape].find(s => s.id === selectedSize)
+      : sizesOptions[selectedShape]?.find(s => s.id === selectedSize);
     
-    const actualSize = isPreview ? size : (sizeNum * 96); // 96 DPI for print
+    if (!sizeData) return null;
+
+    const sizeMm = selectedShape === 'rectangle' ? Math.max(sizeData.width, sizeData.height) : sizeData.mm;
+    const actualSize = isPreview ? size : (sizeMm * 3.78); // 3.78 pixels per mm at 96 DPI
     const borderWidth = borderEnabled ? parseInt(borderThickness) : 0;
 
     const stickerStyle = {
       width: selectedShape === 'rectangle' 
-        ? `${actualSize * (sizesOptions[selectedShape].find(s => s.id === selectedSize)?.width / sizesOptions[selectedShape].find(s => s.id === selectedSize)?.height || 1)}px`
+        ? `${actualSize * (sizeData.width / sizeData.height)}px`
         : `${actualSize}px`,
       height: `${actualSize}px`,
       fontSize: `${actualSize * 0.2}px`,
@@ -130,67 +151,152 @@ const App = () => {
     };
 
     const baseClasses = `${currentColor.bg} ${currentColor.text} flex flex-col items-center justify-center font-bold relative overflow-hidden`;
-    const shapeClasses = selectedShape === 'round' ? 'rounded-full' : '';
+    
+    const getShapeClasses = () => {
+      switch(selectedShape) {
+        case 'round': return 'rounded-full';
+        case 'star': return 'star-shape';
+        case 'burst': return 'burst-shape';
+        default: return '';
+      }
+    };
 
-    if (selectedShape === 'round') {
+    if (selectedShape === 'star') {
       return (
-        <div 
-          className={`${baseClasses} ${shapeClasses}`}
-          style={stickerStyle}
-          ref={exportMode ? stickerRef : null}
-        >
-          <div className="text-center">
-            <div style={{ fontSize: `${actualSize * 0.35}px` }}>{selectedDiscount}</div>
-            <div style={{ fontSize: `${actualSize * 0.12}px` }} className="mt-1">OFF</div>
-          </div>
-          {!borderEnabled && (
-            <div className="absolute inset-1 rounded-full border-2 border-white opacity-30"></div>
-          )}
+        <div className="relative inline-block" style={{ width: `${actualSize}px`, height: `${actualSize}px` }}>
+          <svg 
+            width={actualSize} 
+            height={actualSize} 
+            viewBox="0 0 100 100" 
+            className="absolute inset-0"
+            ref={exportMode ? stickerRef : null}
+          >
+            <defs>
+              <polygon 
+                id="star" 
+                points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35"
+                fill={currentColor.bg.includes('yellow') ? '#facc15' : 
+                      currentColor.bg.includes('red') ? '#ef4444' :
+                      currentColor.bg.includes('blue') ? '#3b82f6' :
+                      currentColor.bg.includes('green') ? '#22c55e' :
+                      currentColor.bg.includes('orange') ? '#f97316' :
+                      currentColor.bg.includes('purple') ? '#a855f7' :
+                      currentColor.bg.includes('black') ? '#000000' :
+                      currentColor.bg.includes('pink') ? '#ec4899' :
+                      currentColor.bg.includes('indigo') ? '#6366f1' :
+                      currentColor.bg.includes('teal') ? '#14b8a6' : '#ef4444'}
+                stroke={borderEnabled ? currentBorderColor.color : 'none'}
+                strokeWidth={borderWidth}
+              />
+            </defs>
+            <use href="#star" />
+            <text 
+              x="50" 
+              y="45" 
+              textAnchor="middle" 
+              fill={currentColor.text === 'text-white' ? 'white' : 'black'}
+              fontSize={actualSize * 0.25}
+              fontWeight="bold"
+            >
+              {selectedDiscount}
+            </text>
+            <text 
+              x="50" 
+              y="65" 
+              textAnchor="middle" 
+              fill={currentColor.text === 'text-white' ? 'white' : 'black'}
+              fontSize={actualSize * 0.12}
+              fontWeight="bold"
+            >
+              OFF
+            </text>
+          </svg>
         </div>
       );
     }
 
-    if (selectedShape === 'square') {
+    if (selectedShape === 'burst') {
       return (
-        <div 
-          className={baseClasses}
-          style={stickerStyle}
-          ref={exportMode ? stickerRef : null}
-        >
-          <div className="text-center">
-            <div style={{ fontSize: `${actualSize * 0.35}px` }}>{selectedDiscount}</div>
-            <div style={{ fontSize: `${actualSize * 0.12}px` }} className="mt-1">OFF</div>
-          </div>
-          {!borderEnabled && (
-            <>
-              <div className="absolute top-2 right-2 w-4 h-4 border-r-2 border-t-2 border-white opacity-50"></div>
-              <div className="absolute bottom-2 left-2 w-4 h-4 border-l-2 border-b-2 border-white opacity-50"></div>
-            </>
-          )}
+        <div className="relative inline-block" style={{ width: `${actualSize}px`, height: `${actualSize}px` }}>
+          <svg 
+            width={actualSize} 
+            height={actualSize} 
+            viewBox="0 0 100 100" 
+            className="absolute inset-0"
+            ref={exportMode ? stickerRef : null}
+          >
+            <defs>
+              <polygon 
+                id="burst" 
+                points="50,0 60,20 80,10 70,30 100,25 75,45 95,65 70,60 80,85 55,70 50,100 45,70 20,85 30,60 5,65 25,45 0,25 30,30 20,10 40,20"
+                fill={currentColor.bg.includes('yellow') ? '#facc15' : 
+                      currentColor.bg.includes('red') ? '#ef4444' :
+                      currentColor.bg.includes('blue') ? '#3b82f6' :
+                      currentColor.bg.includes('green') ? '#22c55e' :
+                      currentColor.bg.includes('orange') ? '#f97316' :
+                      currentColor.bg.includes('purple') ? '#a855f7' :
+                      currentColor.bg.includes('black') ? '#000000' :
+                      currentColor.bg.includes('pink') ? '#ec4899' :
+                      currentColor.bg.includes('indigo') ? '#6366f1' :
+                      currentColor.bg.includes('teal') ? '#14b8a6' : '#ef4444'}
+                stroke={borderEnabled ? currentBorderColor.color : 'none'}
+                strokeWidth={borderWidth}
+              />
+            </defs>
+            <use href="#burst" />
+            <text 
+              x="50" 
+              y="45" 
+              textAnchor="middle" 
+              fill={currentColor.text === 'text-white' ? 'white' : 'black'}
+              fontSize={actualSize * 0.2}
+              fontWeight="bold"
+            >
+              {selectedDiscount}
+            </text>
+            <text 
+              x="50" 
+              y="60" 
+              textAnchor="middle" 
+              fill={currentColor.text === 'text-white' ? 'white' : 'black'}
+              fontSize={actualSize * 0.1}
+              fontWeight="bold"
+            >
+              OFF
+            </text>
+          </svg>
         </div>
       );
     }
 
-    if (selectedShape === 'rectangle') {
-      return (
-        <div 
-          className={baseClasses}
-          style={stickerStyle}
-          ref={exportMode ? stickerRef : null}
-        >
-          <div className="text-center">
-            <div style={{ fontSize: `${actualSize * 0.35}px` }}>{selectedDiscount}</div>
-            <div style={{ fontSize: `${actualSize * 0.12}px` }} className="mt-1">OFF</div>
-          </div>
-          {!borderEnabled && (
-            <>
-              <div className="absolute left-2 top-1/2 w-6 h-0.5 bg-white opacity-50 transform -translate-y-1/2"></div>
-              <div className="absolute right-2 top-1/2 w-6 h-0.5 bg-white opacity-50 transform -translate-y-1/2"></div>
-            </>
-          )}
+    // Round, Square, Rectangle shapes
+    return (
+      <div 
+        className={`${baseClasses} ${getShapeClasses()}`}
+        style={stickerStyle}
+        ref={exportMode ? stickerRef : null}
+      >
+        <div className="text-center">
+          <div style={{ fontSize: `${actualSize * 0.35}px` }}>{selectedDiscount}</div>
+          <div style={{ fontSize: `${actualSize * 0.12}px` }} className="mt-1">OFF</div>
         </div>
-      );
-    }
+        {!borderEnabled && selectedShape === 'round' && (
+          <div className="absolute inset-1 rounded-full border-2 border-white opacity-30"></div>
+        )}
+        {!borderEnabled && selectedShape === 'square' && (
+          <>
+            <div className="absolute top-2 right-2 w-4 h-4 border-r-2 border-t-2 border-white opacity-50"></div>
+            <div className="absolute bottom-2 left-2 w-4 h-4 border-l-2 border-b-2 border-white opacity-50"></div>
+          </>
+        )}
+        {!borderEnabled && selectedShape === 'rectangle' && (
+          <>
+            <div className="absolute left-2 top-1/2 w-6 h-0.5 bg-white opacity-50 transform -translate-y-1/2"></div>
+            <div className="absolute right-2 top-1/2 w-6 h-0.5 bg-white opacity-50 transform -translate-y-1/2"></div>
+          </>
+        )}
+      </div>
+    );
   };
 
   const generateSVG = () => {
@@ -198,10 +304,12 @@ const App = () => {
     const currentBorderColor = getCurrentBorderColor();
     const sizeData = selectedShape === 'rectangle' 
       ? sizesOptions[selectedShape].find(s => s.id === selectedSize)
-      : { inches: sizesOptions[selectedShape].find(s => s.id === selectedSize)?.inches };
+      : sizesOptions[selectedShape]?.find(s => s.id === selectedSize);
     
-    const width = selectedShape === 'rectangle' ? sizeData.width * 96 : sizeData.inches * 96;
-    const height = selectedShape === 'rectangle' ? sizeData.height * 96 : sizeData.inches * 96;
+    if (!sizeData) return '';
+
+    const width = selectedShape === 'rectangle' ? sizeData.width * 3.78 : sizeData.mm * 3.78;
+    const height = selectedShape === 'rectangle' ? sizeData.height * 3.78 : sizeData.mm * 3.78;
     const borderWidth = borderEnabled ? parseInt(borderThickness) : 0;
 
     const colorMap = {
@@ -217,6 +325,12 @@ const App = () => {
     if (selectedShape === 'round') {
       const r = (Math.min(width, height) - borderWidth * 2) / 2;
       shape = `<circle cx="${width/2}" cy="${height/2}" r="${r}" fill="${fillColor}" stroke="${borderEnabled ? currentBorderColor.color : 'none'}" stroke-width="${borderWidth}"/>`;
+    } else if (selectedShape === 'star') {
+      const points = "50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35";
+      shape = `<polygon points="${points}" fill="${fillColor}" stroke="${borderEnabled ? currentBorderColor.color : 'none'}" stroke-width="${borderWidth}" transform="scale(${width/100},${height/100})"/>`;
+    } else if (selectedShape === 'burst') {
+      const points = "50,0 60,20 80,10 70,30 100,25 75,45 95,65 70,60 80,85 55,70 50,100 45,70 20,85 30,60 5,65 25,45 0,25 30,30 20,10 40,20";
+      shape = `<polygon points="${points}" fill="${fillColor}" stroke="${borderEnabled ? currentBorderColor.color : 'none'}" stroke-width="${borderWidth}" transform="scale(${width/100},${height/100})"/>`;
     } else {
       shape = `<rect x="${borderWidth/2}" y="${borderWidth/2}" width="${width - borderWidth}" height="${height - borderWidth}" fill="${fillColor}" stroke="${borderEnabled ? currentBorderColor.color : 'none'}" stroke-width="${borderWidth}"/>`;
     }
@@ -236,7 +350,7 @@ const App = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `discount-sticker-${selectedDiscount.replace('%', 'percent')}-${selectedShape}.svg`;
+    a.download = `eu-discount-sticker-${selectedDiscount.replace('%', 'percent')}-${selectedShape}-${selectedSize}mm.svg`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -249,20 +363,24 @@ const App = () => {
     
     const sizeData = selectedShape === 'rectangle' 
       ? sizesOptions[selectedShape].find(s => s.id === selectedSize)
-      : { inches: sizesOptions[selectedShape].find(s => s.id === selectedSize)?.inches };
+      : sizesOptions[selectedShape]?.find(s => s.id === selectedSize);
     
-    const width = selectedShape === 'rectangle' ? sizeData.width : sizeData.inches;
-    const height = selectedShape === 'rectangle' ? sizeData.height : sizeData.inches;
+    const width = selectedShape === 'rectangle' ? sizeData.width : sizeData.mm;
+    const height = selectedShape === 'rectangle' ? sizeData.height : sizeData.mm;
+    
+    // Convert mm to inches for PDF
+    const widthInches = width * 0.0393701;
+    const heightInches = height * 0.0393701;
     
     const pdf = new jsPDF({
       orientation: width > height ? 'landscape' : 'portrait',
       unit: 'in',
-      format: [width, height]
+      format: [widthInches, heightInches]
     });
     
     const imgData = canvas.toDataURL('image/png');
-    pdf.addImage(imgData, 'PNG', 0, 0, width, height);
-    pdf.save(`discount-sticker-${selectedDiscount.replace('%', 'percent')}-${selectedShape}.pdf`);
+    pdf.addImage(imgData, 'PNG', 0, 0, widthInches, heightInches);
+    pdf.save(`eu-discount-sticker-${selectedDiscount.replace('%', 'percent')}-${selectedShape}-${selectedSize}mm.pdf`);
   };
 
   const downloadPNG = async () => {
@@ -272,7 +390,7 @@ const App = () => {
     });
     
     const link = document.createElement('a');
-    link.download = `discount-sticker-${selectedDiscount.replace('%', 'percent')}-${selectedShape}.png`;
+    link.download = `eu-discount-sticker-${selectedDiscount.replace('%', 'percent')}-${selectedShape}-${selectedSize}mm.png`;
     link.href = canvas.toDataURL();
     link.click();
   };
@@ -282,13 +400,14 @@ const App = () => {
   };
 
   const generatePrintLayout = () => {
-    const stickersPerRow = selectedShape === 'rectangle' ? 2 : 3;
-    const rows = 8;
+    // EU A4 paper format optimization
+    const stickersPerRow = selectedShape === 'rectangle' ? 3 : 4;
+    const rows = 6;
     const totalStickers = stickersPerRow * rows;
 
     return Array.from({ length: totalStickers }, (_, i) => (
       <div key={i} className="print-sticker-item flex items-center justify-center">
-        {renderSticker(150, false)}
+        {renderSticker(120, false)}
       </div>
     ));
   };
@@ -298,8 +417,8 @@ const App = () => {
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <h1 className="text-3xl font-bold text-gray-900">Professional Discount Sticker Maker</h1>
-          <p className="text-gray-600 mt-1">Create, customize, and export high-quality discount stickers</p>
+          <h1 className="text-3xl font-bold text-gray-900">EU Professional Discount Sticker Maker</h1>
+          <p className="text-gray-600 mt-1">Create EU-compliant discount stickers with metric measurements and European retail standards</p>
         </div>
       </div>
 
@@ -312,13 +431,13 @@ const App = () => {
             {/* Shape Selection */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Sticker Shape</h3>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-5 gap-3">
                 {shapes.map(shape => (
                   <button
                     key={shape.id}
                     onClick={() => {
                       setSelectedShape(shape.id);
-                      setSelectedSize(sizesOptions[shape.id][2]?.id || sizesOptions[shape.id][0]?.id);
+                      setSelectedSize(sizesOptions[shape.id]?.[3]?.id || sizesOptions[shape.id]?.[0]?.id);
                     }}
                     className={`p-4 rounded-lg border-2 transition-all ${
                       selectedShape === shape.id 
@@ -356,8 +475,8 @@ const App = () => {
 
             {/* Size Selection */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Sticker Size</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-64 overflow-y-auto">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">EU Standard Sizes</h3>
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 max-h-64 overflow-y-auto">
                 {sizesOptions[selectedShape]?.map(size => (
                   <button
                     key={size.id}
@@ -376,8 +495,8 @@ const App = () => {
 
             {/* Discount Selection */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Discount Amount</h3>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 max-h-48 overflow-y-auto">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Discount Percentage</h3>
+              <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 max-h-48 overflow-y-auto">
                 {discounts.map(discount => (
                   <button
                     key={discount}
@@ -473,10 +592,10 @@ const App = () => {
               )}
             </div>
 
-            {/* Paper Type Selection */}
+            {/* EU Paper Type Selection */}
             <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Sticker Roll Type</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-48 overflow-y-auto">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">EU Standard Sticker Rolls</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
                 {paperTypes.map(paper => (
                   <button
                     key={paper.id}
@@ -488,7 +607,7 @@ const App = () => {
                     }`}
                   >
                     <div className="font-medium">{paper.name}</div>
-                    <div className="text-sm text-gray-500">Standard roll format</div>
+                    <div className="text-sm text-gray-500">{paper.description}</div>
                   </button>
                 ))}
               </div>
@@ -513,7 +632,7 @@ const App = () => {
               <div className="space-y-2 text-sm text-gray-600 mb-6">
                 <div><strong>Shape:</strong> {shapes.find(s => s.id === selectedShape)?.name}</div>
                 <div><strong>Discount:</strong> {selectedDiscount}</div>
-                <div><strong>Size:</strong> {getSizeDisplay(sizesOptions[selectedShape]?.find(s => s.id === selectedSize) || sizesOptions[selectedShape][0])}</div>
+                <div><strong>Size:</strong> {getSizeDisplay(sizesOptions[selectedShape]?.find(s => s.id === selectedSize) || sizesOptions[selectedShape]?.[0])}</div>
                 <div><strong>Color:</strong> {colors.find(c => c.id === selectedColor)?.name}</div>
                 <div><strong>Border:</strong> {borderEnabled ? `${borderColors.find(b => b.id === borderColor)?.name} (${borderThickness}px)` : 'None'}</div>
                 <div><strong>Roll Type:</strong> {paperTypes.find(p => p.id === selectedPaperType)?.name}</div>
@@ -548,7 +667,7 @@ const App = () => {
                   onClick={handlePrint}
                   className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                 >
-                  🖨️ Print Stickers
+                  🖨️ Print (A4 Format)
                 </button>
               </div>
             </div>
@@ -557,9 +676,9 @@ const App = () => {
         </div>
       </div>
 
-      {/* Print Layout - Hidden on Screen */}
+      {/* EU A4 Print Layout - Hidden on Screen */}
       <div className="print-only">
-        <div className="print-layout">
+        <div className="print-layout-eu">
           {generatePrintLayout()}
         </div>
       </div>
